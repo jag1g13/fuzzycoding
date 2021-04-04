@@ -28,18 +28,18 @@ test_that("can match keywords", {
 
 test_that("can match multi-word phrases", {
     expect_false(
-        is_keywords_multi_match(words, c("picket common"))
+        is_keywords_match(words, c("picket common"))
     )
 
     expect_true(
-        is_keywords_multi_match(words, c("picket dragon"))
+        is_keywords_match(words, c("picket dragon"))
     )
 
     expect_true(
-        is_keywords_multi_match(words, c("dragon common"))
+        is_keywords_match(words, c("dragon common"))
     )
 
     expect_false(
-        is_keywords_multi_match(words, c("dragon common notpresent"))
+        is_keywords_match(words, c("dragon common notpresent"))
     )
 })
