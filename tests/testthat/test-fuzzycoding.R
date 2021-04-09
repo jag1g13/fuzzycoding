@@ -1,5 +1,6 @@
 library(testthat)
 
+source("../../util.R")
 source("../../codeframe.R")
 source("../../fuzzycoding.R")
 
@@ -30,20 +31,26 @@ test_that("can match similar words", {
 })
 
 test_that("can match multi-word phrases", {
+    # Multi-word phrases have to be split into word vectors
+    # The `clean_responses` function does this
     expect_false(
-        is_keywords_match(words, c("picket common"))
+        is_keywords_match(words,
+                          clean_responses(c("picket common")))
     )
 
     expect_true(
-        is_keywords_match(words, c("picket dragon"))
+        is_keywords_match(words,
+                          clean_responses(c("picket dragon")))
     )
 
     expect_true(
-        is_keywords_match(words, c("dragon common"))
+        is_keywords_match(words,
+                          clean_responses(c("dragon common")))
     )
 
     expect_false(
-        is_keywords_match(words, c("dragon common notpresent"))
+        is_keywords_match(words,
+                          clean_responses(c("dragon common notpresent")))
     )
 })
 

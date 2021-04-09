@@ -3,31 +3,13 @@ require(parallel)
 require(stringdist)
 require(stringr)
 
-#' Clean responses for case and punctuation then split into words.
-#'
-#' Any punctuation is considered a word split except apostrophes.
-#'
-#' @examples
-#' df$responses <- clean_responses(df$responses)
-clean_responses <- function(responses) {
-  cleaned <- responses %>%
-    lapply(tolower) %>%
-    str_replace_all("[,.;:-]+", " ") %>%  # Replace punctuation with spaces
-    str_remove_all("['’]+") %>%  # Remove apostrophes - i.e. don't -> dont
-    strsplit(" +")
-  return(cleaned)
-}
-
 #' Do any of the patterns match any of the words?
 #'
 #' Patterns are fuzzy matched with an allowed error rate of 1/3 the length of
 #' each word for each word in the pattern.
 #' @param words Phrase being coded as list of words
-#' @param patterns Topic keywords (or keyphrases) to look for
-is_keywords_match <- function(words, patterns) {
-  # Split each pattern into words
-  patterns_words <- strsplit(patterns, " +")
-
+#' @param patterns_words Topic keywords/phrases as list of word vectors
+is_keywords_match <- function(words, patterns_words) {
   matches <- lapply(patterns_words, function(pattern_words) {
     # Match pattern words against target words
     word_matches <- lapply(pattern_words, function(pattern) {
@@ -59,7 +41,7 @@ apply_coding <- function(responses, coding_frame) {
   clusterExport(cluster, c("is_keywords_match", "amatch"))
 
   for (topic in names(coding_frame)) {
-    strings <- coding_frame[[topic]]
+    strings <- clean_responses(coding_frame[[topic]])
 
     is_match <- function(texts) {
         return(is_keywords_match(texts, strings))
@@ -73,6 +55,10 @@ apply_coding <- function(responses, coding_frame) {
   return(responses)
 }
 
+#' Select responses coded with a given topic.
+#'
+#' @param coded Dataframe of coded responses
+#' @param topic Topic to filter by
 coded_as <- function(coded, topic) {
   column <- paste("topic.", topic, sep = "")
   coded %>% filter(!!as.symbol(column) == TRUE) %>% return
