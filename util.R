@@ -15,3 +15,27 @@ clean_responses <- function(responses) {
     strsplit(" +")
   return(cleaned)
 }
+
+#' Write a list of responses to file without CSV decoration.
+#'
+#' @param responses List of responses
+#' @param filepath Path of file to write
+write_responses <- function(responses, filepath) {
+  if (file.exists(filepath)) {
+    file.remove(filepath)
+  }
+  lapply(responses, write, filepath, append = TRUE)
+}
+
+#' Duplicate rows in a dataframe.
+#'
+#' Useful for testing performance with bigger datasets.
+#' @param frame Dataframe to double
+#' @param doubles Number of doublings
+double_frame <- function(frame, doubles) {
+  for (i in 1:doubles) {
+    frame <- rbind(frame, frame)
+  }
+
+  return(frame)
+}
