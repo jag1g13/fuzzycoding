@@ -20,7 +20,7 @@ test_that("can create new codeframe", {
 })
 
 test_that("can merge codeframes", {
-  frame <- load.codeframe("../../data/example-codeframe.csv")
+  frame <- read.codeframe("../../data/example-codeframe.csv")
   frame2 <- codeframe(covid = c("covid19", "virus"),
                       family = c("parents"))
 

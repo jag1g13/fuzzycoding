@@ -20,11 +20,11 @@ as.codeframe <- function(x) {
     return(codeframe)
 }
 
-#' Load a codeframe from CSV
+#' Read a codeframe from CSV.
 #'
 #' @examples
-#' load.codeframe("data/example-codeframe.csv")
-load.codeframe <- function(...) {
+#' read.codeframe("data/example-codeframe.csv")
+read.codeframe <- function(...) {
     data <- read.csv(...) %>% unstack(keyword ~ topic)
     return(as.codeframe(data))
 }
