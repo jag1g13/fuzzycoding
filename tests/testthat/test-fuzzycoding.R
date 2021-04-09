@@ -1,5 +1,6 @@
 library(testthat)
 
+source("../../codeframe.R")
 source("../../fuzzycoding.R")
 
 words <- c("picket", "dragon", "common")
@@ -16,7 +17,9 @@ test_that("can match keywords", {
   expect_true(
     is_keywords_match(words, c("picket", "dragon"))
   )
+})
 
+test_that("can match similar words", {
   expect_true(
     is_keywords_match(words, c("pocket"))
   )
@@ -42,4 +45,17 @@ test_that("can match multi-word phrases", {
     expect_false(
         is_keywords_match(words, c("dragon common notpresent"))
     )
+})
+
+test_that("can apply coding frame", {
+  responses <- read.csv("../../data/example-responses.csv")
+  responses$response <- clean_responses(responses$response)
+
+  frame <- read.codeframe("../../data/example-codeframe.csv")
+
+  results <- apply_coding(responses, frame)
+
+  # Example responses contain 4 on covid and 2 on jobs
+  expect_equal(coded_as(results, "covid") %>% nrow, 4)
+  expect_equal(coded_as(results, "jobs") %>% nrow, 2)
 })
