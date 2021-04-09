@@ -3,7 +3,7 @@ library(testthat)
 source("../../codeframe.R")
 
 test_that("can load codeframe", {
-  frame <- load.codeframe("../../data/example-codeframe.csv")
+  frame <- read.codeframe("../../data/example-codeframe.csv")
 
   expect_equal(frame$covid, c("covid", "coronavirus", "mask"))
 
